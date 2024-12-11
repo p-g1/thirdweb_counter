@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Ethereum } from "@thirdweb-dev/chains";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -12,6 +15,8 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
+
+const queryClient = new QueryClient();
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,7 +31,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <QueryClientProvider client={queryClient}>
+          <ThirdwebProvider 
+            supportedChains={[Ethereum]}
+            supportedWallets={[]}
+          >
+            {children}
+          </ThirdwebProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
